@@ -6,7 +6,7 @@ from math import e
 # This random motion, where the logarithm of the quantity follows Brownian Motion,
 # is used to simulate stock prices
 
-class american_options:
+class european_options:
     
     def __init__(self, strike_price: int, vol: int, rf_rate: int, time: int, init_price: int, time_steps = 1):
         
@@ -32,8 +32,8 @@ class american_options:
         
         return ST
         
-    def american_call(self, sim_num: int) -> int:
-        #As a function for american options, this only checks for price by end of maturity time
+    def european_call(self, sim_num: int) -> float:
+        #As a function for european options, this only checks for price by end of maturity time
         
         #Using the GBM to simulate stock paths
         ST = self.GBM(sim_num)
@@ -45,8 +45,8 @@ class american_options:
             
         return e ** ( -1 * self.rf_rate * self.time) * (sum(payoffs)/len(payoffs))
     
-    def american_put(self, sim_num: int) -> int:
-        #Also a function for american options, this checks for below strike price
+    def european_put(self, sim_num: int) -> float:
+        #Also a function for european options, this checks for below strike price
         ST = self.GBM(sim_num)
         
         payoffs = []
@@ -55,6 +55,6 @@ class american_options:
             
         return e ** (-1 * self.rf_rate * self.time) * (sum(payoffs)/len(payoffs))
 
-american = american_options(105, 0.2, 0.01, 1, 100)
-print(american.american_call(100))
-print(american.american_put(100))
+european = european_options(105, 0.2, 0.01, 1, 100)
+print(european.european_call(100))
+print(european.european_put(100))
