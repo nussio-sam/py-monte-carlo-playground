@@ -26,8 +26,8 @@ class AmericanOptions(Options):
         
 
         #Each part of the equation for GBM, divided into chunks
-        drift = dt * (self.rf_rate - (0.5 * self.vol ** 2))
-        diff = self.vol * np.sqrt(dt)
+        drift = timestep * (self.rf_rate - (0.5 * self.vol ** 2))
+        diff = self.vol * np.sqrt(timestep)
         
         #This returns another numpy array
         returns = drift + diff * Z
