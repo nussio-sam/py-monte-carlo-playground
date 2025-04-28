@@ -8,7 +8,7 @@ class AmericanOptions(Options):
     MERICUH
     '''
     
-    def __init__(self, strike_price, vol, rf_rate, time, init_price, timesteps: int):
+    def __init__(self, strike_price, vol, rf_rate, time, init_price, timesteps = 1):
         super().__init__(strike_price, vol, rf_rate, time, init_price)
         self.timesteps = timesteps
         #Timesteps = The amount of steps of time calculated between contract start and expiry
@@ -21,6 +21,8 @@ class AmericanOptions(Options):
         #each timestep is the overall time divided by how many we're checking
         timestep = self.time / self.timesteps
         
+        paths = np.zeros((sim_num, self.timesteps + 1))
+        paths[:, 0] = self.init_price
         #A numpy array of a bunch of normalized random numbers, with the 2d shape of the sim_num x timesteps
         Z = np.random.normal(0, 1, (sim_num, self.timesteps))
         
@@ -32,12 +34,10 @@ class AmericanOptions(Options):
         #This returns another numpy array
         returns = drift + diff * Z
         
-        #essentially just the mean of the array, just fancy
-        paths = np.cumsum(returns, axis = 1)
-        paths = np.hstack([np.zeros((sim_num, 1)), paths])
+        for t in range(1, self.timesteps + 1):
+           paths[:, t] = paths[:, t - 1] * np.exp(drift + diff * Z[:, t-1])
         
-                    
-        return self.init_price * np.exp(paths)
+        return paths
     
     def american_put(self, sim_num: int):
         
@@ -113,7 +113,7 @@ class AmericanOptions(Options):
             coeffs = np.linalg.lstsq(funcs.T, regress_y)[0]
             cont = np.matmul(funcs.T, coeffs)
         
-            call_now = payoffs[profits, t] > cont
+            put_now = payoffs[profits, t] > cont
             update = np.where(profits)[0][put_now]
             
             flows[update] = payoffs[update, t]
@@ -125,6 +125,4 @@ class AmericanOptions(Options):
     
 
 american = AmericanOptions(100, 0.2, 0.04, 1, 100, 20)
-print(american.american_put(200))
-print(american.american_call(200))
-            
+print(american.american_call(1000))
