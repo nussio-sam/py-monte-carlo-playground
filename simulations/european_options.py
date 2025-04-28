@@ -23,7 +23,7 @@ class EuropeanOptions(Options):
         return e ** ( -1 * self.rf_rate * self.time) * np.mean(payoffs)
     
     def european_put(self, sim_num: int) -> float:
-        #Also a function for american options, this checks for below strike price
+        #Also a function for european options, this checks for below strike price
         ST = self.GBM(sim_num)
         
         payoffs = np.maximum(self.strike_price - ST, np.zeros_like(ST))
