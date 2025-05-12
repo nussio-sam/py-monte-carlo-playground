@@ -29,3 +29,18 @@ class EuropeanOptions(Options):
         payoffs = np.maximum(self.strike_price - ST, np.zeros_like(ST))
             
         return e ** (-1 * self.rf_rate * self.time) * np.mean(payoffs)
+
+def delta(self, bump_percentage: float, sim_num: int) -> float:
+        #The delta of an option shows how much it changes as the underlying asset changes
+        #There are closed formulas for this, but simulating with MC is more in line with this portfolio
+        
+        #The og_price is just the current option call price
+        og_price = self.european_call(sim_num)
+        
+        #This calculates the call price if we bumped the initial price by a tiny bit
+        bump_option = EuropeanOptions(self.strike_price, self.vol, self.rf_rate, self.time, self.init_price * (1 + bump_percentage))
+        bumped_price = bump_option.european_call(sim_num)
+        
+        #Finding the output difference over the bump difference
+        delta = (bumped_price - og_price) / (self.init_price * bump_percentage)
+        return delta
