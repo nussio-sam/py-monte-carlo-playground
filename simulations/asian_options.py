@@ -56,6 +56,21 @@ class AsianOptions(AmericanOptions):
         disc = np.exp(-1 * self.rf_rate * self.time)
         payoffs = np.maximum(self.strike_price - means, np.zeros_like(means))
         return disc * np.mean(payoffs)
+
+    def delta(self, bump_percentage: float, sim_num: int, mean_func) -> float:
+        #The delta of an option shows how much it changes as the underlying asset changes
+        #There are closed formulas for this, but simulating with MC is more in line with this portfolio
+        
+        #The og_price is just the current option call price
+        og_price = self.asian_call(sim_num)
+        
+        #This calculates the call price if we bumped the initial price by a tiny bit
+        bump_option = AsianOptions(self.strike_price, self.vol, self.rf_rate, self.time, self.init_price * (1 + bump_percentage), self.timesteps)
+        bumped_price = bump_option.asian_call(mean_func, sim_num)
+        
+        #Finding the output difference over the bump difference
+        delta = (bumped_price - og_price) / (self.init_price * bump_percentage)
+        return delta
     
 asian = AsianOptions(0.2, 0.04, 1, 100, timesteps = 50, strike_price = 105)
 print(asian.asian_call(AsianOptions.arithmetic_mean, 1000))
