@@ -121,6 +121,21 @@ class AmericanOptions(Options):
             flows *= disc
             
         return np.mean(flows)
+
+    def delta(self, bump_percentage: float, sim_num: int) -> float:
+        #The delta of an option shows how much it changes as the underlying asset changes
+        #There are closed formulas for this, but simulating with MC is more in line with this portfolio
+        
+        #The og_price is just the current option call price
+        og_price = self.american_call(sim_num)
+        
+        #This calculates the call price if we bumped the initial price by a tiny bit
+        bump_option = AmericanOptions(self.strike_price, self.vol, self.rf_rate, self.time, self.init_price * (1 + bump_percentage), self.timesteps)
+        bumped_price = bump_option.american_call(sim_num)
+        
+        #Finding the output difference over the bump difference
+        delta = (bumped_price - og_price) / (self.init_price * bump_percentage)
+        return delta
     
     
 
