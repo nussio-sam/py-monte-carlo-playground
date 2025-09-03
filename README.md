@@ -1,15 +1,21 @@
 # py-monte-carlo-playground
 
 ## What is This?
-My Monte Carlo Simulations are a surface-level foray into how random sampling can be used to model:
-- Stochastic Methods
-- American/European Option pricings
-- General Geometry/Mathematical Problems
+Having skimmed through Glasserman's bible of quant, I find myself in the wonderful position to outweigh my own capabilities
+This contains, and will contain, a clear analysis of the way I learn both Monte-Carlo and its backbone in measure theory throughout time
+I'm a math major after all, this is where I live.
 
+### The Future of This:
+- Add comparative calculations between pure black-scholes closed-form
+- Add comparative calculations between geometric and arithmetic Asian
+- Standard comparisons to trees in American
+- Finalize all greeks for each option
+- Add futures?
 ## Why Make it?
-This is a personal exercise towards understanding how computers can be used to power processes that are simply too imprecise
-or multi-faceted for math modeling. I started this project as a senior in highschool, and am primarily using this as a learning
-exercise
+This is a personal exercise towards understanding how I can use programming for either scientific or industry usage to evaluate hugely
+complex systems, and learn why elegant and discrete solutions to such problems are so important in the world. 
+The motto of this is:
+** Take Nothing for Granted **
 
 ## The Math and Theory Behind it
 As this python repo continues to grow, the math and financial theory behind it are primarily directed towards being able to
